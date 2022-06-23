@@ -3,6 +3,7 @@
   "version": "1.0.7",
   "bin": "./bin/cli.js",
   "private": "true",
+  "homepage": "https://philipk-webdev.github.io/PplFinder",
   "license": "MIT",
   "repository": "https://github.com/powerlink/PplFinder",
   "dependencies": {
