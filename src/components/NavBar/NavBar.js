@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { NavLink } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -11,7 +12,9 @@ const NavBar = () => {
   };
 
   return (
-    <AppBar position="static" color="transparent" style={{ position: "fixed", top: 0 }}>
+    <AppBar
+      position="static" color="transparent"
+      style={{ position: "fixed", top: 0 }}>
       <Tabs
         value={value}
         onChange={handleChange}
@@ -19,10 +22,18 @@ const NavBar = () => {
         indicatorColor="primary"
         textColor="primary"
       >
-        <Tab label="Home" index={0} />
-        <Tab label="Favorites" index={1} />
+        <NavLink
+          to="/"
+        >
+          <Tab label="Home" index={0} />
+        </NavLink>
+        <NavLink
+          to="/favorite"
+        >
+          <Tab label="Favorites" index={1} />
+        </NavLink>
       </Tabs>
-    </AppBar>
+    </AppBar >
   );
 };
 
