@@ -4,6 +4,7 @@ import Spinner from "components/Spinner";
 import CheckBox from "components/CheckBox";
 import IconButton from "@material-ui/core/IconButton";
 import FavoriteIcon from "@material-ui/icons/Favorite";
+import MoreIcon from '@material-ui/icons/More';
 import * as S from "./style";
 
 const UserList = ({ users, isLoading }) => {
@@ -49,6 +50,9 @@ const UserList = ({ users, isLoading }) => {
               <S.IconButtonWrapper isVisible={index === hoveredUserId}>
                 <IconButton>
                   <FavoriteIcon color="error" />
+                </IconButton>
+                <IconButton>
+                  <MoreIcon color="blue" />
                 </IconButton>
               </S.IconButtonWrapper>
             </S.User>

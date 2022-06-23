@@ -13,6 +13,7 @@ export const List = styled.div`
   height: calc(100vh - 270px);
   margin-block-start: 30px;
   overflow-y: auto;
+  padding:10px 10px;
 `;
 
 export const User = styled.div`
