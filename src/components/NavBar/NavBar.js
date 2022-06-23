@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -22,16 +22,16 @@ const NavBar = () => {
         indicatorColor="primary"
         textColor="primary"
       >
-        <NavLink
-          to="/"
-        >
-          <Tab label="Home" index={0} />
-        </NavLink>
-        <NavLink
-          to="/favorite"
-        >
-          <Tab label="Favorites" index={1} />
-        </NavLink>
+        <Tab
+          label="Home"
+          index={0}
+          component={Link}
+          to={"/"} />
+        <Tab label="Favorites"
+          index={1}
+          component={Link}
+          to={"/favorite"}
+        />
       </Tabs>
     </AppBar >
   );
