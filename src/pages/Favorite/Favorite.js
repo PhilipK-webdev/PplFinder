@@ -1,8 +1,10 @@
 import React from 'react'
+function Favorite({ users, isLoading }) {
 
-function Favorite() {
     return (
-        <div>Favorite</div>
+        <div>Favorite
+
+        </div>
     )
 }
 

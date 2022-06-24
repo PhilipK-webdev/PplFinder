@@ -26,8 +26,9 @@ const NavBar = () => {
           label="Home"
           index={0}
           component={Link}
-          to={"/"} />
-        <Tab label="Favorites"
+          to={"/home"} />
+        <Tab
+          label="Favorites"
           index={1}
           component={Link}
           to={"/favorite"}

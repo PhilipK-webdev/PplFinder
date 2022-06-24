@@ -6,17 +6,19 @@ import IconButton from "@material-ui/core/IconButton";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import InfoIcon from '@material-ui/icons/Info';
 import * as S from "./style";
+import { useLocalStorage } from "hooks/useLocalStorage";
 
-const COUNTRY = [
-  { value: "BR", bool: false },
-  { value: "AU", bool: false },
-  { value: "CA", bool: false },
-  { value: "DE", bool: false }
-]
 const UserList = ({ users, isLoading }) => {
   const [hoveredUserId, setHoveredUserId] = useState();
+  const [clickUserId, setClickUserId] = useState(Array(users.length).fill(false));
   const [arrayValues, setArrayValues] = useState([]);
   const [usersState, setUsersState] = useState([]);
+  const [uuid, setUuid] = useState([]);
+  const [favoriteId, setFavoriteId, removeFavoriteId] = useLocalStorage("uuid", "");
+
+  useEffect(() => {
+    console.log(favoriteId);
+  }, [favoriteId])
   const handleMouseEnter = (index) => {
     setHoveredUserId(index);
   };
@@ -24,6 +26,21 @@ const UserList = ({ users, isLoading }) => {
   const handleMouseLeave = () => {
     setHoveredUserId();
   };
+
+  const setFavorite = (index, uuidUser) => {
+    let arrayUuid = uuid;
+    let arrayOfBooleans = clickUserId;
+    arrayOfBooleans[index] = !arrayOfBooleans[index];
+    if (arrayUuid.includes(uuidUser)) {
+      const findUuid = arrayUuid.indexOf(uuidUser);
+      arrayUuid.splice(findUuid, 1);
+    } else {
+      arrayUuid.push(uuidUser);
+    }
+    setUuid(arrayUuid);
+    setFavoriteId([...arrayUuid]);
+    setClickUserId([...arrayOfBooleans]);
+  }
 
   const onChange = useCallback((e) => {
     const { value } = e.target;
@@ -82,7 +99,8 @@ const UserList = ({ users, isLoading }) => {
                   {user?.location.city} {user?.location.country}
                 </Text>
               </S.UserInfo>
-              <S.IconButtonWrapper isVisible={index === hoveredUserId}>
+              <S.IconButtonWrapper isVisible={index === hoveredUserId || clickUserId[index]}
+                onClick={() => setFavorite(index, user.login.uuid)}>
                 <IconButton>
                   <FavoriteIcon color="error" />
                 </IconButton>
@@ -112,7 +130,8 @@ const UserList = ({ users, isLoading }) => {
                   {user?.location.city} {user?.location.country}
                 </Text>
               </S.UserInfo>
-              <S.IconButtonWrapper isVisible={index === hoveredUserId}>
+              <S.IconButtonWrapper isVisible={index === hoveredUserId || clickUserId[index]}
+                onClick={() => setFavorite(index)}>
                 <IconButton>
                   <FavoriteIcon color="error" />
                 </IconButton>
