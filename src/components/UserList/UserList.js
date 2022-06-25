@@ -7,19 +7,21 @@ import FavoriteIcon from "@material-ui/icons/Favorite";
 import InfoIcon from '@material-ui/icons/Info';
 import * as S from "./style";
 import { useLocalStorage } from "hooks/useLocalStorage";
-
+const arrayValues = [];
 const UserList = ({ users, isLoading }) => {
   const [hoveredUserId, setHoveredUserId] = useState();
-  const [arrayValues, setArrayValues] = useState([]);
   const [usersState, setUsersState] = useState([]);
   const [favoriteId, setFavoriteId, removeFavoriteId] = useLocalStorage("user", "");
   const [userSaveFavorite, setUserSaveFavorite] = useState();
 
+
   useEffect(() => {
-    console.log("local storage", favoriteId);
     favoriteId.length ? setUserSaveFavorite([...favoriteId]) : setUserSaveFavorite([]);
   }, [favoriteId])
 
+  useEffect(() => {
+    setUsersState(users);
+  }, [users]);
 
   const handleMouseEnter = (index) => {
     setHoveredUserId(index);
@@ -29,6 +31,16 @@ const UserList = ({ users, isLoading }) => {
     setHoveredUserId();
   };
 
+  const filterUsersByCountry = () => {
+    const temp = arrayValues.map((country, indexCountry) => {
+      return users.filter((user, index) => {
+        if (user.nat === country) {
+          return user;
+        }
+      });
+    }).flat();
+    setUsersState([...temp]);
+  }
   const setFavorite = (user) => {
     user.boolean = !user.boolean;
     let userArray = userSaveFavorite;
@@ -48,38 +60,25 @@ const UserList = ({ users, isLoading }) => {
       }
       userArray.push(userObject);
     }
-    console.log("userArray", userArray);
     setUserSaveFavorite([...userArray]);
     setFavoriteId([...userArray]);
   }
 
   const onChange = useCallback((e) => {
     const { value } = e.target;
-    let temp = [];
     if (!arrayValues.includes(value)) {
-      let arr = [];
-      arr.push(value);
-      temp = users.filter((user, index) => {
-        if (user.nat === value) {
-          return user;
-        }
-      });
-      setUsersState([...usersState, ...temp]);
-      setArrayValues([...arrayValues, ...arr]);
+      arrayValues.push(value);
     } else {
-      let spliceArr = arrayValues;
-      const index = spliceArr.indexOf(value);
-      spliceArr.splice(index, 1);
-      spliceArr.forEach((val, indexVal) => {
-        users.forEach((user, indexUser) => {
-          if (val === user.nat) {
-            temp.push(user);
-          }
-        });
-      })
-      setArrayValues([...spliceArr]);
-      setUsersState([...temp]);
+      const index = arrayValues.indexOf(value);
+      arrayValues.splice(index, 1);
     }
+
+    if (arrayValues.length === 0) {
+      setUsersState(users);
+      return;
+    }
+
+    filterUsersByCountry();
   }, [usersState, arrayValues]);
   return (
     <S.UserList>
@@ -90,7 +89,7 @@ const UserList = ({ users, isLoading }) => {
         <CheckBox value="DE" label="Germany" onChange={onChange} />
       </S.Filters>
       <S.List>
-        {usersState.length === 0 ? users.map((user, index) => {
+        {usersState.map((user, index) => {
           return (
             <S.User
               key={index}
@@ -115,43 +114,12 @@ const UserList = ({ users, isLoading }) => {
                 <IconButton>
                   <FavoriteIcon color="error" />
                 </IconButton>
-                <IconButton>
+                {/* <IconButton>
                   <InfoIcon />
-                </IconButton>
+                </IconButton> */}
               </S.IconButtonWrapper>
             </S.User>
-          );
-        }) : usersState.map((user, index) => {
-          return (
-            <S.User
-              key={index}
-              onMouseEnter={() => handleMouseEnter(index)}
-              onMouseLeave={handleMouseLeave}
-            >
-              <S.UserPicture src={user?.picture.large} alt="" />
-              <S.UserInfo>
-                <Text size="22px" bold>
-                  {user?.name.title} {user?.name.first} {user?.name.last}
-                </Text>
-                <Text size="14px">{user?.email}</Text>
-                <Text size="14px">
-                  {user?.location.street.number} {user?.location.street.name}
-                </Text>
-                <Text size="14px">
-                  {user?.location.city} {user?.location.country}
-                </Text>
-              </S.UserInfo>
-              <S.IconButtonWrapper isVisible={index === hoveredUserId || user.boolean}
-                onClick={() => setFavorite(user)}>
-                <IconButton>
-                  <FavoriteIcon color="error" />
-                </IconButton>
-                <IconButton>
-                  <InfoIcon />
-                </IconButton>
-              </S.IconButtonWrapper>
-            </S.User>
-          );
+          )
         })}
         {isLoading && (
           <S.SpinnerWrapper>
