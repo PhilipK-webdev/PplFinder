@@ -10,15 +10,17 @@ import { useLocalStorage } from "hooks/useLocalStorage";
 
 const UserList = ({ users, isLoading }) => {
   const [hoveredUserId, setHoveredUserId] = useState();
-  const [clickUserId, setClickUserId] = useState(Array(users.length).fill(false));
   const [arrayValues, setArrayValues] = useState([]);
   const [usersState, setUsersState] = useState([]);
-  const [uuid, setUuid] = useState([]);
-  const [favoriteId, setFavoriteId, removeFavoriteId] = useLocalStorage("uuid", "");
+  const [favoriteId, setFavoriteId, removeFavoriteId] = useLocalStorage("user", "");
+  const [userSaveFavorite, setUserSaveFavorite] = useState();
 
   useEffect(() => {
-    console.log(favoriteId);
+    console.log("local storage", favoriteId);
+    favoriteId.length ? setUserSaveFavorite([...favoriteId]) : setUserSaveFavorite([]);
   }, [favoriteId])
+
+
   const handleMouseEnter = (index) => {
     setHoveredUserId(index);
   };
@@ -27,19 +29,28 @@ const UserList = ({ users, isLoading }) => {
     setHoveredUserId();
   };
 
-  const setFavorite = (index, uuidUser) => {
-    let arrayUuid = uuid;
-    let arrayOfBooleans = clickUserId;
-    arrayOfBooleans[index] = !arrayOfBooleans[index];
-    if (arrayUuid.includes(uuidUser)) {
-      const findUuid = arrayUuid.indexOf(uuidUser);
-      arrayUuid.splice(findUuid, 1);
+  const setFavorite = (user) => {
+    user.boolean = !user.boolean;
+    let userArray = userSaveFavorite;
+    let localstorage = favoriteId;
+    const indexUserExists = userArray.map(user => user.uuid).indexOf(user.login.uuid);
+
+    if (indexUserExists !== -1) {
+      userArray.splice(indexUserExists, 1);
     } else {
-      arrayUuid.push(uuidUser);
+      let userObject = {
+        name: user.name,
+        location: user.location,
+        uuid: user.login.uuid,
+        boolean: user.boolean,
+        picture: user.picture.large
+
+      }
+      userArray.push(userObject);
     }
-    setUuid(arrayUuid);
-    setFavoriteId([...arrayUuid]);
-    setClickUserId([...arrayOfBooleans]);
+    console.log("userArray", userArray);
+    setUserSaveFavorite([...userArray]);
+    setFavoriteId([...userArray]);
   }
 
   const onChange = useCallback((e) => {
@@ -99,8 +110,8 @@ const UserList = ({ users, isLoading }) => {
                   {user?.location.city} {user?.location.country}
                 </Text>
               </S.UserInfo>
-              <S.IconButtonWrapper isVisible={index === hoveredUserId || clickUserId[index]}
-                onClick={() => setFavorite(index, user.login.uuid)}>
+              <S.IconButtonWrapper isVisible={index === hoveredUserId || user.boolean}
+                onClick={() => setFavorite(user)}>
                 <IconButton>
                   <FavoriteIcon color="error" />
                 </IconButton>
@@ -130,8 +141,8 @@ const UserList = ({ users, isLoading }) => {
                   {user?.location.city} {user?.location.country}
                 </Text>
               </S.UserInfo>
-              <S.IconButtonWrapper isVisible={index === hoveredUserId || clickUserId[index]}
-                onClick={() => setFavorite(index)}>
+              <S.IconButtonWrapper isVisible={index === hoveredUserId || user.boolean}
+                onClick={() => setFavorite(user)}>
                 <IconButton>
                   <FavoriteIcon color="error" />
                 </IconButton>

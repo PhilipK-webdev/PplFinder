@@ -6,9 +6,7 @@ export function useLocalStorage(key, defaultValue) {
 
 function useStorage(key, defaultValue, storageObject) {
     const [value, setValue] = useState(() => {
-        const object = JSON.parse(storageObject.getItem(key));
-        const jsonValue = object?.map((item) => Boolean(item))
-        console.log(jsonValue);
+        const jsonValue = JSON.parse(storageObject.getItem(key));
         if (jsonValue !== null) return jsonValue;
         if (typeof initialValue === "function") {
             return defaultValue();

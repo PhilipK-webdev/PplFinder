@@ -11,11 +11,11 @@ const AppRouter = () => {
       <Router>
         <NavBar />
         <Switch>
-          <Route path="/home">
-            <Home users={users} isLoading={isLoading} />
-          </Route>
           <Route path="/favorite">
-            <Favorite users={users} isLoading={isLoading} />
+            <Favorite />
+          </Route>
+          <Route path="/">
+            <Home users={users} isLoading={isLoading} />
           </Route>
         </Switch>
       </Router>

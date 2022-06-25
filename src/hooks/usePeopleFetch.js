@@ -11,9 +11,13 @@ export const usePeopleFetch = () => {
 
   async function fetchUsers() {
     setIsLoading(true);
-    const response = await axios.get(`https://randomuser.me/api/?results=25&page=1&seed=21c84a0e89a690cf`);
+    const response = await axios.get(`https://randomuser.me/api/?results=25&page=1`);
     setIsLoading(false);
-    setUsers(response.data.results);
+    let newArrayOfUsers = response.data.results.map(user => {
+      user['boolean'] = false;
+      return user;
+    })
+    setUsers(newArrayOfUsers);
   }
 
   return { users, isLoading, fetchUsers };
