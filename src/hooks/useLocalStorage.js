@@ -23,6 +23,6 @@ function useStorage(key, defaultValue, storageObject) {
         storageObject.setItem(key, JSON.stringify(value));
     }, [key, value, storageObject])
 
-    const remove = useCallback(() => setValue(undefined), []);
-    return [value, setValue, remove]
+    // const remove = useCallback(() => setValue(undefined), []);
+    return [value, setValue]
 }

@@ -1,35 +1,33 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import Text from "components/Text";
 import Spinner from "components/Spinner";
 import CheckBox from "components/CheckBox";
-import IconButton from "@material-ui/core/IconButton";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import InfoIcon from '@material-ui/icons/Info';
 import * as S from "./style";
-import { useLocalStorage } from "hooks/useLocalStorage";
+import User from "./User";
+
 const arrayValues = [];
-const UserList = ({ users, isLoading }) => {
-  const [hoveredUserId, setHoveredUserId] = useState();
+const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites }) => {
   const [usersState, setUsersState] = useState([]);
-  const [favoriteId, setFavoriteId, removeFavoriteId] = useLocalStorage("user", "");
   const [userSaveFavorite, setUserSaveFavorite] = useState();
 
+  const updateFavoriteUsers = () => {
+    const favoriteUsers = users.map((user) => {
+      user.isFavorite = usersFavorites.some(userFavorite => user.login.uuid === userFavorite.uuid);
+      return user;
+    });
+    setUsersState([...favoriteUsers]);
+  }
 
   useEffect(() => {
-    favoriteId.length ? setUserSaveFavorite([...favoriteId]) : setUserSaveFavorite([]);
-  }, [favoriteId])
+    usersFavorites.length ? setUserSaveFavorite([...usersFavorites]) : setUserSaveFavorite([]);
+    if (usersFavorites.length) {
+      updateFavoriteUsers();
+    }
+  }, [usersFavorites])
 
   useEffect(() => {
     setUsersState(users);
   }, [users]);
 
-  const handleMouseEnter = (index) => {
-    setHoveredUserId(index);
-  };
-
-  const handleMouseLeave = () => {
-    setHoveredUserId();
-  };
 
   const filterUsersByCountry = () => {
     const temp = arrayValues.map((country, indexCountry) => {
@@ -42,11 +40,8 @@ const UserList = ({ users, isLoading }) => {
     setUsersState([...temp]);
   }
   const setFavorite = (user) => {
-    user.boolean = !user.boolean;
     let userArray = userSaveFavorite;
-    let localstorage = favoriteId;
-    const indexUserExists = userArray.map(user => user.uuid).indexOf(user.login.uuid);
-
+    const indexUserExists = userArray.findIndex(_user => _user.uuid === user.login.uuid);
     if (indexUserExists !== -1) {
       userArray.splice(indexUserExists, 1);
     } else {
@@ -54,14 +49,14 @@ const UserList = ({ users, isLoading }) => {
         name: user.name,
         location: user.location,
         uuid: user.login.uuid,
-        boolean: user.boolean,
-        picture: user.picture.large
+        isFavorite: true,
+        picture: { large: user.picture.large }
 
       }
       userArray.push(userObject);
     }
     setUserSaveFavorite([...userArray]);
-    setFavoriteId([...userArray]);
+    setUsersFavorites([...userArray]);
   }
 
   const onChange = useCallback((e) => {
@@ -91,34 +86,13 @@ const UserList = ({ users, isLoading }) => {
       <S.List>
         {usersState.map((user, index) => {
           return (
-            <S.User
+            <User
+              index={index}
               key={index}
-              onMouseEnter={() => handleMouseEnter(index)}
-              onMouseLeave={handleMouseLeave}
-            >
-              <S.UserPicture src={user?.picture.large} alt="" />
-              <S.UserInfo>
-                <Text size="22px" bold>
-                  {user?.name.title} {user?.name.first} {user?.name.last}
-                </Text>
-                <Text size="14px">{user?.email}</Text>
-                <Text size="14px">
-                  {user?.location.street.number} {user?.location.street.name}
-                </Text>
-                <Text size="14px">
-                  {user?.location.city} {user?.location.country}
-                </Text>
-              </S.UserInfo>
-              <S.IconButtonWrapper isVisible={index === hoveredUserId || user.boolean}
-                onClick={() => setFavorite(user)}>
-                <IconButton>
-                  <FavoriteIcon color="error" />
-                </IconButton>
-                {/* <IconButton>
-                  <InfoIcon />
-                </IconButton> */}
-              </S.IconButtonWrapper>
-            </S.User>
+              user={user}
+              setFavorite={setFavorite}
+              showInfoIcon={true}
+            />
           )
         })}
         {isLoading && (

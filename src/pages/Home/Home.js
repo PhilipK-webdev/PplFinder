@@ -2,7 +2,7 @@ import React from "react";
 import Text from "components/Text";
 import UserList from "components/UserList";
 import * as S from "./style";
-const Home = ({ users, isLoading }) => {
+const Home = ({ users, isLoading, usersFavorites, setUsersFavorites }) => {
   return (
     <S.Home>
       <S.Content>
@@ -11,7 +11,7 @@ const Home = ({ users, isLoading }) => {
             PplFinder
           </Text>
         </S.Header>
-        <UserList users={users} isLoading={isLoading} />
+        <UserList users={users} isLoading={isLoading} usersFavorites={usersFavorites} setUsersFavorites={setUsersFavorites} />
       </S.Content>
     </S.Home>
   );

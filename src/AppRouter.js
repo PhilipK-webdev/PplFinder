@@ -3,19 +3,20 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Home, Favorite } from "pages";
 import { ThemeProvider } from "theme";
 import NavBar from "components/NavBar";
-import { usePeopleFetch } from "hooks";
+import { usePeopleFetch, useLocalStorage } from "hooks";
 const AppRouter = () => {
   const { users, isLoading } = usePeopleFetch();
+  const [usersFavorites, setUsersFavorites] = useLocalStorage("user", "");
   return (
     <ThemeProvider>
       <Router>
         <NavBar />
         <Switch>
           <Route path="/favorite">
-            <Favorite />
+            <Favorite usersFavorites={usersFavorites} setUsersFavorites={setUsersFavorites} />
           </Route>
           <Route path="/">
-            <Home users={users} isLoading={isLoading} />
+            <Home users={users} isLoading={isLoading} usersFavorites={usersFavorites} setUsersFavorites={setUsersFavorites} />
           </Route>
         </Switch>
       </Router>

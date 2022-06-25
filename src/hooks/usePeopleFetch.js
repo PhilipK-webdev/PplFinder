@@ -14,7 +14,8 @@ export const usePeopleFetch = () => {
     const response = await axios.get(`https://randomuser.me/api/?results=25&page=1`);
     setIsLoading(false);
     let newArrayOfUsers = response.data.results.map(user => {
-      user['boolean'] = false;
+      // To have indication of the favorites in one single source of truth
+      user['isFavorite'] = false;
       return user;
     })
     setUsers(newArrayOfUsers);
