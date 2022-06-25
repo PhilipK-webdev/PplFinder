@@ -4,7 +4,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import IconButton from "@material-ui/core/IconButton";
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Text from "components/Text";
-function User({ user, setFavorite, index, showInfoIcon }) {
+function User({ user, setFavorite, index, showInfoIcon, onInfoClick }) {
     const [hoveredUserId, setHoveredUserId] = useState();
     const handleMouseEnter = (index) => {
         setHoveredUserId(index);
@@ -31,15 +31,23 @@ function User({ user, setFavorite, index, showInfoIcon }) {
                     {user?.location.city} {user?.location.country}
                 </Text>
             </S.UserInfo>
-            <S.IconButtonWrapper isVisible={index === hoveredUserId || user.isFavorite}
-                onClick={() => setFavorite(user)}>
-                <IconButton>
-                    <FavoriteIcon color="error" />
-                </IconButton>
-                {showInfoIcon ? <IconButton>
-                    <InfoIcon />
-                </IconButton> : null}
-            </S.IconButtonWrapper>
+            <S.IconsContainer>
+                <S.IconButtonWrapper isVisible={index === hoveredUserId || user.isFavorite}
+                    onClick={() => setFavorite(user)}>
+                    <IconButton>
+                        <FavoriteIcon color="error" />
+                    </IconButton>
+                </S.IconButtonWrapper>
+
+                {showInfoIcon ?
+                    <S.IconButtonWrapper onClick={() => onInfoClick(user)} isVisible={index === hoveredUserId || user.isFavorite}>
+                        <IconButton>
+                            <InfoIcon />
+                        </IconButton>
+                    </S.IconButtonWrapper> : null
+                }
+
+            </S.IconsContainer>
         </S.User>
     )
 }

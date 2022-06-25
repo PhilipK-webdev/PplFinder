@@ -13,10 +13,17 @@ const AppRouter = () => {
         <NavBar />
         <Switch>
           <Route path="/favorite">
-            <Favorite usersFavorites={usersFavorites} setUsersFavorites={setUsersFavorites} />
+            <Favorite
+              usersFavorites={usersFavorites}
+              setUsersFavorites={setUsersFavorites}
+            />
           </Route>
           <Route path="/">
-            <Home users={users} isLoading={isLoading} usersFavorites={usersFavorites} setUsersFavorites={setUsersFavorites} />
+            <Home
+              users={users}
+              isLoading={isLoading}
+              usersFavorites={usersFavorites}
+              setUsersFavorites={setUsersFavorites} />
           </Route>
         </Switch>
       </Router>

@@ -3,11 +3,14 @@ import Spinner from "components/Spinner";
 import CheckBox from "components/CheckBox";
 import * as S from "./style";
 import User from "./User";
+import Modal from "components/Modal";
 
 const arrayValues = [];
 const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites }) => {
   const [usersState, setUsersState] = useState([]);
   const [userSaveFavorite, setUserSaveFavorite] = useState();
+  const [isModalOpen, setOpenModal] = useState(false);
+  const [modalData, setModalData] = useState(false);
 
   const updateFavoriteUsers = () => {
     const favoriteUsers = users.map((user) => {
@@ -39,6 +42,7 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites }) => {
     }).flat();
     setUsersState([...temp]);
   }
+
   const setFavorite = (user) => {
     let userArray = userSaveFavorite;
     const indexUserExists = userArray.findIndex(_user => _user.uuid === user.login.uuid);
@@ -75,33 +79,43 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites }) => {
 
     filterUsersByCountry();
   }, [usersState, arrayValues]);
+
+
+  const setModal = (user) => {
+    setOpenModal(true);
+    setModalData(user);
+  }
   return (
-    <S.UserList>
-      <S.Filters>
-        <CheckBox value="BR" label="Brazil" onChange={onChange} />
-        <CheckBox value="AU" label="Australia" onChange={onChange} />
-        <CheckBox value="CA" label="Canada" onChange={onChange} />
-        <CheckBox value="DE" label="Germany" onChange={onChange} />
-      </S.Filters>
-      <S.List>
-        {usersState.map((user, index) => {
-          return (
-            <User
-              index={index}
-              key={index}
-              user={user}
-              setFavorite={setFavorite}
-              showInfoIcon={true}
-            />
-          )
-        })}
-        {isLoading && (
-          <S.SpinnerWrapper>
-            <Spinner color="primary" size="45px" thickness={6} variant="indeterminate" />
-          </S.SpinnerWrapper>
-        )}
-      </S.List>
-    </S.UserList>
+    <>
+      <S.UserList>
+        <S.Filters>
+          <CheckBox value="BR" label="Brazil" onChange={onChange} />
+          <CheckBox value="AU" label="Australia" onChange={onChange} />
+          <CheckBox value="CA" label="Canada" onChange={onChange} />
+          <CheckBox value="DE" label="Germany" onChange={onChange} />
+        </S.Filters>
+        <S.List>
+          {usersState.map((user, index) => {
+            return (
+              <User
+                index={index}
+                key={index}
+                user={user}
+                setFavorite={setFavorite}
+                showInfoIcon={true}
+                onInfoClick={setModal}
+              />
+            )
+          })}
+          {isLoading && (
+            <S.SpinnerWrapper>
+              <Spinner color="primary" size="45px" thickness={6} variant="indeterminate" />
+            </S.SpinnerWrapper>
+          )}
+        </S.List>
+      </S.UserList>
+      {isModalOpen ? <Modal user={modalData} open={isModalOpen} handleClose={setOpenModal} /> : null}
+    </>
   );
 };
 
