@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import { Home, Favorite } from "pages";
 import { ThemeProvider } from "theme";
 import NavBar from "components/NavBar";
 import { usePeopleFetch, useLocalStorage } from "hooks";
 const AppRouter = () => {
-  const { users, isLoading } = usePeopleFetch();
+  const [pageNumber, setPageNumber] = useState(1);
+  const { users, isLoading } = usePeopleFetch(pageNumber);
   const [usersFavorites, setUsersFavorites] = useLocalStorage("user", "");
   return (
     <ThemeProvider>
@@ -20,6 +21,7 @@ const AppRouter = () => {
           </Route>
           <Route path="/">
             <Home
+              setPageNumber={setPageNumber}
               users={users}
               isLoading={isLoading}
               usersFavorites={usersFavorites}

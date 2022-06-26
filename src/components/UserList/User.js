@@ -5,7 +5,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MapIcon from '@material-ui/icons/Map';
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Text from "components/Text";
-function User({ user, setFavorite, index, showInfoIcon, onInfoClick }) {
+function User({ user, setFavorite, index, showInfoIcon, onInfoClick, lastUserRef }) {
     const [hoveredUserId, setHoveredUserId] = useState();
     const handleMouseEnter = (index) => {
         setHoveredUserId(index);
@@ -18,6 +18,7 @@ function User({ user, setFavorite, index, showInfoIcon, onInfoClick }) {
         <S.User
             onMouseEnter={() => handleMouseEnter(index)}
             onMouseLeave={handleMouseLeave}
+            ref={lastUserRef}
         >
             <S.UserPicture src={user?.picture.large} alt="" />
             <S.UserInfo>

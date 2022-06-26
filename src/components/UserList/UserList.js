@@ -6,12 +6,22 @@ import User from "./User";
 import Modal from "components/Modal";
 
 const arrayValues = [];
-const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites }) => {
+const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPageNumber }) => {
   const [usersState, setUsersState] = useState([]);
   const [userSaveFavorite, setUserSaveFavorite] = useState();
   const [isModalOpen, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState(false);
-
+  const observer = useRef();
+  const lastUserRef = useCallback((node) => {
+    if (isLoading) return;
+    if (observer.current) observer.current.disconnect();
+    observer.current = new IntersectionObserver(entries => {
+      if (entries[0].isIntersecting) {
+        setPageNumber(prevPageNumber => prevPageNumber + 1);
+      }
+    })
+    if (node) observer.current.observe(node);
+  }, [isLoading])
   const updateFavoriteUsers = () => {
     const favoriteUsers = users.map((user) => {
       user.isFavorite = usersFavorites.some(userFavorite => user.login.uuid === userFavorite.uuid);
@@ -93,19 +103,33 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites }) => {
           <CheckBox value="AU" label="Australia" onChange={onChange} />
           <CheckBox value="CA" label="Canada" onChange={onChange} />
           <CheckBox value="DE" label="Germany" onChange={onChange} />
+          <CheckBox value="ES" label="Spain" onChange={onChange} />
         </S.Filters>
-        <S.List>
+        <S.List >
           {usersState.map((user, index) => {
-            return (
-              <User
+            if (usersState.length === index + 1) {
+              return <User
                 index={index}
                 key={index}
                 user={user}
                 setFavorite={setFavorite}
                 showInfoIcon={true}
                 onInfoClick={setModal}
+                lastUserRef={lastUserRef}
               />
-            )
+            } else {
+              return (
+                <User
+                  index={index}
+                  key={index}
+                  user={user}
+                  setFavorite={setFavorite}
+                  showInfoIcon={true}
+                  onInfoClick={setModal}
+                />
+              )
+            }
+
           })}
           {isLoading && (
             <S.SpinnerWrapper>
