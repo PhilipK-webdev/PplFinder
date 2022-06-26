@@ -7,9 +7,10 @@ import * as S from "./style";
 const Map = ({ location }) => {
   const _location = {
     address: '1600 Amphitheatre Parkway, Mountain View, california.',
-    lat: 31.0461,
-    lng: 34.8516,
+    lat: Number(location.coordinates.latitude),
+    lng: Number(location.coordinates.longitude),
   }
+  console.log(location);
   const LocationPin = ({ text }) => (
     <S.LocatoinPin>
       <IconButton>
@@ -19,7 +20,6 @@ const Map = ({ location }) => {
       <p className="pin-text">{text}</p>
     </S.LocatoinPin>
   )
-  // API KEY .env file AIzaSyCo2_jPXxs5om2JKLGfb-a41Rtf9_zEQ_A
   return (
     <S.Map>
       <S.GoogleMap>
