@@ -21,11 +21,15 @@ const CustomModal = ({ open, handleClose, user }) => {
       aria-describedby="modal-modal-description"
     >
       <S.Background>
-        <div>Hi Modal</div>
-        <S.Name>{`${user.name.first} ${user.name.last}`}</S.Name>
-        {/* <S.Phone></S.Phone>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <S.Card>
+            <S.Information>Hi Modal</S.Information>
+            <S.Information>{`${user.name.first} ${user.name.last}`}</S.Information>
+            {/* <S.Phone></S.Phone>
         <S.Address></S.Address> */}
-        <Map />
+          </S.Card>
+          <Map />
+        </div>
       </S.Background>
     </Modal>
   );

@@ -15,15 +15,17 @@ const Map = ({ location }) => {
       <IconButton>
         <LocationOnIcon />
       </IconButton>
+      {/* create class inside styles */}
       <p className="pin-text">{text}</p>
     </S.LocatoinPin>
   )
-
+  // API KEY .env file AIzaSyCo2_jPXxs5om2JKLGfb-a41Rtf9_zEQ_A
   return (
     <S.Map>
       <S.GoogleMap>
         <GoogleMapReact
-          bootstrapURLKeys={{ key: 'AIzaSyCo2_jPXxs5om2JKLGfb-a41Rtf9_zEQ_A' }}
+          // bootstrapURLKeys={{ key: 'AIzaSyCo2_jPXxs5om2JKLGfb-a41Rtf9_zEQ_A' }}
+          bootstrapURLKeys={{ key: process.env.REACT_APP_API_KEY }}
           defaultCenter={_location}
           defaultZoom={8}
         >

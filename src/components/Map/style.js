@@ -5,7 +5,8 @@ export const Map = styled.div`
 
 export const GoogleMap = styled.div`
     width: 100%;
-    height: 60vh;
+    height: 40vh;
+    margin-top:40px;
 `;
 
 export const LocatoinPin = styled.div`

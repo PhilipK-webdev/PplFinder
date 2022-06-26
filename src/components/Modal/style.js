@@ -12,12 +12,26 @@ export const Background = styled.div`
     boxShadow: 24;
     background: white;
     color: black;
-    width: 50vw;
-    height: 30vh;
+    width: 55vw;
+    height: 60vh;
 
 `;
 
+export const Card = styled.div`
+    display: flex;
+    justify-content: space-aroundnter;
+    align-content: z;
+    flex-direction: column;
+    justify-content: center;
+    height: 10vh;
+    border: 1px solid;
+    align-self: center;
+    width: 25vw;
+    margin-top:10px;
+`;
 
-export const Name = styled.div`
-
+export const Information = styled.div`
+    display:flex;
+    align-self:start;
+    margin-left:5px;
 `;
