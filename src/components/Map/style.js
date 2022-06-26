@@ -13,9 +13,13 @@ export const LocatoinPin = styled.div`
     display: flex;
     align-items: center;
     width: 180px;
-    color: var(--main-blue);
+    color:#1200ff;
 `;
 
-
+export const Address = styled.p`
+    color:#303030;
+    font-size:12px;
+    font-weight:bold;
+`;
 
 

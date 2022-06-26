@@ -31,7 +31,7 @@ export const CardHeader = styled.div`
     margin-bottom:5px;
     &>button{
         align-self:start;
-        margin-top:5px;
+        margin-top:10px;
         margin-left:auto;
         margin-right:10px;
         width:100px;
@@ -55,6 +55,11 @@ export const CardHeader = styled.div`
         font-weight:500;
     }
         
+`;
+export const ImageName = styled.div`
+    display:flex;
+    font-size:16px;
+    font-weight:bold;
 `;
 export const CardBody = styled.div`
     display:flex;
