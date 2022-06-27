@@ -12,13 +12,13 @@ export const usePeopleFetch = (pageNumber) => {
   async function fetchUsers() {
     setIsLoading(true);
     const response = await axios.get(`https://randomuser.me/api/?results=25&page=${pageNumber}`);
-    setIsLoading(false);
     let newArrayOfUsers = response.data.results.map(user => {
       // To have indication of the favorites in one single source of truth
       user['isFavorite'] = false;
       return user;
-    })
-    setUsers(newArrayOfUsers);
+    });
+    setUsers([...newArrayOfUsers, ...users]);
+    setIsLoading(false);
   }
 
   return { users, isLoading, fetchUsers };
