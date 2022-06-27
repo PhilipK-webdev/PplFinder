@@ -11,12 +11,13 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
   const [userSaveFavorite, setUserSaveFavorite] = useState();
   const [isModalOpen, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState(false);
+  const [isAlertOn, setIsAlertOn] = useState(false);
   const observer = useRef();
   const lastUserRef = useCallback((node) => {
     if (isLoading) return;
     if (observer.current) observer.current.disconnect();
     observer.current = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) {
+      if (entries[0].isIntersecting && !arrayValues.length) {
         setPageNumber(prevPageNumber => prevPageNumber + 1);
       }
     })
@@ -50,7 +51,10 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
         }
       });
     }).flat();
-    setUsersState([...temp]);
+    if (temp.length) {
+      setIsAlertOn(false);
+      return setUsersState([...temp])
+    } else { setIsAlertOn(true) };
   }
 
   const setFavorite = (user) => {
@@ -80,6 +84,7 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
     } else {
       const index = arrayValues.indexOf(value);
       arrayValues.splice(index, 1);
+      setIsAlertOn(false);
     }
 
     if (arrayValues.length === 0) {
@@ -105,6 +110,7 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
           <CheckBox value="DE" label="Germany" onChange={onChange} />
           <CheckBox value="ES" label="Spain" onChange={onChange} />
         </S.Filters>
+        {isAlertOn ? <S.Alert>No Match </S.Alert> : null}
         <S.List >
           {usersState.map((user, index) => {
             if (usersState.length === index + 1) {

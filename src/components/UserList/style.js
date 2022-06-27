@@ -59,3 +59,15 @@ export const Filters = styled.div`
 
 export const IconsContainer = styled.div`
 `;
+
+export const Alert = styled.div`
+margin-left: auto;
+margin-right: auto;
+font-size: 18px;
+margin-top: 5px;
+color: red;
+background: white;
+padding: 5px;
+border-radius: 10px;
+font-weight: 500;
+`;
