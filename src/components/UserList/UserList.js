@@ -14,9 +14,12 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
   const [isAlertOn, setIsAlertOn] = useState(false);
   const observer = useRef();
   const lastUserRef = useCallback((node) => {
+    const options = {
+      treshold: 2.0
+    }
     if (isLoading) return;
     if (observer.current) observer.current.disconnect();
-    observer.current = new IntersectionObserver(entries => {
+    observer.current = new IntersectionObserver((entries, options) => {
       if (entries[0].isIntersecting && !arrayValues.length) {
         setPageNumber(prevPageNumber => prevPageNumber + 1);
       }
@@ -42,7 +45,6 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
     setUsersState(users);
   }, [users]);
 
-
   const filterUsersByCountry = () => {
     const temp = arrayValues.map((country, indexCountry) => {
       return users.filter((user, index) => {
@@ -51,10 +53,15 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
         }
       });
     }).flat();
-    if (temp.length) {
+    if (!temp.length) {
+      setTimeout(() => {
+        setIsAlertOn(true);
+      });
+    }
+    setTimeout(() => {
       setIsAlertOn(false);
-      return setUsersState([...temp])
-    } else { setIsAlertOn(true) };
+    }, 2000);
+    setUsersState([...temp]);
   }
 
   const setFavorite = (user) => {
@@ -110,7 +117,7 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
           <CheckBox value="DE" label="Germany" onChange={onChange} />
           <CheckBox value="ES" label="Spain" onChange={onChange} />
         </S.Filters>
-        {isAlertOn ? <S.Alert>No Match </S.Alert> : null}
+        {!isAlertOn ? <S.Alert>No Match </S.Alert> : null}
         <S.List >
           {usersState.map((user, index) => {
             if (usersState.length === index + 1) {
