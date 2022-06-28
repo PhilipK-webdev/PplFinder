@@ -4,7 +4,6 @@ import axios from "axios";
 export const usePeopleFetch = (pageNumber) => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [hasMore, setHasMore] = useState(false);
   useEffect(() => {
     fetchUsers();
   }, [pageNumber]);
@@ -17,7 +16,7 @@ export const usePeopleFetch = (pageNumber) => {
       user['isFavorite'] = false;
       return user;
     });
-    setUsers([...newArrayOfUsers, ...users]);
+    setUsers([...users, ...newArrayOfUsers]);
     setIsLoading(false);
   }
 

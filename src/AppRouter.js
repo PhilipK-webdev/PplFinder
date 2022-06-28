@@ -6,8 +6,8 @@ import NavBar from "components/NavBar";
 import { usePeopleFetch, useLocalStorage } from "hooks";
 const AppRouter = () => {
   const [pageNumber, setPageNumber] = useState(1);
-  const { users, isLoading } = usePeopleFetch(pageNumber);
   const [usersFavorites, setUsersFavorites] = useLocalStorage("user", "");
+  const { users, isLoading } = usePeopleFetch(pageNumber);
   return (
     <ThemeProvider>
       <Router>

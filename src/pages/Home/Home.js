@@ -2,7 +2,11 @@ import React from "react";
 import Text from "components/Text";
 import UserList from "components/UserList";
 import * as S from "./style";
-const Home = ({ users, isLoading, usersFavorites, setUsersFavorites, setPageNumber }) => {
+const Home = ({ users,
+  isLoading,
+  usersFavorites,
+  setUsersFavorites,
+  setPageNumber }) => {
   return (
     <S.Home>
       <S.Content>

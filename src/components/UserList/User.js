@@ -1,11 +1,17 @@
 import React, { useState } from 'react'
 import * as S from "./style";
-// import InfoIcon from '@material-ui/icons/Info';
 import IconButton from "@material-ui/core/IconButton";
 import MapIcon from '@material-ui/icons/Map';
 import FavoriteIcon from "@material-ui/icons/Favorite";
 import Text from "components/Text";
-function User({ user, setFavorite, index, showInfoIcon, onInfoClick, lastUserRef }) {
+function User({
+    user,
+    setFavorite,
+    index,
+    showInfoIcon,
+    onInfoClick,
+    lastUserRef }) {
+
     const [hoveredUserId, setHoveredUserId] = useState();
     const handleMouseEnter = (index) => {
         setHoveredUserId(index);
@@ -42,13 +48,14 @@ function User({ user, setFavorite, index, showInfoIcon, onInfoClick, lastUserRef
                 </S.IconButtonWrapper>
 
                 {showInfoIcon ?
-                    <S.IconButtonWrapper onClick={() => onInfoClick(user)} isVisible={index === hoveredUserId || user.isFavorite}>
+                    <S.IconButtonWrapper
+                        onClick={() => onInfoClick(user)}
+                        isVisible={index === hoveredUserId || user.isFavorite}>
                         <IconButton>
                             <MapIcon />
                         </IconButton>
-                    </S.IconButtonWrapper> : null
-                }
-
+                    </S.IconButtonWrapper>
+                    : null}
             </S.IconsContainer>
         </S.User>
     )

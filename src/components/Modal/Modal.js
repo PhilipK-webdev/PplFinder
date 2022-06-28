@@ -1,12 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import Button from 'components/Button';
 import Modal from '@material-ui/core/Modal';
 import * as S from "./style";
 import Avatar from '@material-ui/core/Avatar';
 import Map from 'components/Map';
 import Text from "components/Text";
 const CustomModal = ({ open, handleClose, user }) => {
-  console.log('user', user)
-
   return (
     <Modal
       open={open}

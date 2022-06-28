@@ -63,10 +63,9 @@ export const IconsContainer = styled.div`
 export const Alert = styled.div`
     margin-left: auto;
     margin-right: auto;
-    font-size: 22px;
+    font-size: 30px;
     margin-top: 5px;
     color: #c1c1c1;
-    background: white;
     border-radius: 10px;
     font-weight: bold;
     width: 32vw;

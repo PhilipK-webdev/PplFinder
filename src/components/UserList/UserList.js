@@ -6,12 +6,19 @@ import User from "./User";
 import Modal from "components/Modal";
 
 const arrayValues = [];
-const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPageNumber }) => {
-  const [usersState, setUsersState] = useState([]);
-  const [userSaveFavorite, setUserSaveFavorite] = useState();
+const UserList = ({
+  users,
+  isLoading,
+  usersFavorites,
+  setUsersFavorites,
+  setPageNumber }) => {
+  const [allUsers, setAllUsers] = useState([]);
+  const [addUserToFavorite, setAddUserToFavorite] = useState();
   const [isModalOpen, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState(false);
   const [isAlertOn, setIsAlertOn] = useState(false);
+
+  // infinity scroll
   const observer = useRef();
   const lastUserRef = useCallback((node) => {
     let options = {
@@ -26,47 +33,50 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
       }
     }, options)
     if (node) observer.current.observe(node);
-  }, [isLoading])
+  }, [isLoading]);
+
+
   const updateFavoriteUsers = () => {
     const favoriteUsers = users.map((user) => {
       user.isFavorite = usersFavorites.some(userFavorite => user.login.uuid === userFavorite.uuid);
       return user;
     });
-    setUsersState([...favoriteUsers]);
+    setAllUsers([...favoriteUsers]);
   }
 
   useEffect(() => {
-    usersFavorites.length ? setUserSaveFavorite([...usersFavorites]) : setUserSaveFavorite([]);
+    usersFavorites.length ? setAddUserToFavorite([...usersFavorites])
+      : setAddUserToFavorite([]);
     if (usersFavorites.length) {
       updateFavoriteUsers();
     }
   }, [usersFavorites])
 
   useEffect(() => {
-    setUsersState(users);
+    setAllUsers(users);
   }, [users]);
 
   const filterUsersByCountry = (value) => {
-    const temp = arrayValues.map((country, indexCountry) => {
+    const temporaryArray = arrayValues.map((country, indexCountry) => {
       return users.filter((user, index) => {
         if (user.nat === country) {
           return user;
         }
       });
     }).flat();
-    if (!temp.length && arrayValues.length) {
+    if (!temporaryArray.length && arrayValues.length) {
       setIsAlertOn(true);
     } else {
       setIsAlertOn(false);
     }
-    setUsersState([...temp]);
+    setAllUsers([...temporaryArray]);
   }
 
   const setFavorite = (user) => {
-    let userArray = userSaveFavorite;
-    const indexUserExists = userArray.findIndex(_user => _user.uuid === user.login.uuid);
+    let addUserToFavoriteCopy = addUserToFavorite;
+    const indexUserExists = addUserToFavoriteCopy.findIndex(_user => _user.uuid === user.login.uuid);
     if (indexUserExists !== -1) {
-      userArray.splice(indexUserExists, 1);
+      addUserToFavoriteCopy.splice(indexUserExists, 1);
     } else {
       let userObject = {
         name: user.name,
@@ -76,10 +86,10 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
         picture: { large: user.picture.large }
 
       }
-      userArray.push(userObject);
+      addUserToFavoriteCopy.push(userObject);
     }
-    setUserSaveFavorite([...userArray]);
-    setUsersFavorites([...userArray]);
+    setAddUserToFavorite([...addUserToFavoriteCopy]);
+    setUsersFavorites([...addUserToFavoriteCopy]);
   }
 
   const onChange = useCallback((e) => {
@@ -93,12 +103,12 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
     }
 
     if (arrayValues.length === 0) {
-      setUsersState(users);
+      setAllUsers(users);
       return;
     }
 
     filterUsersByCountry(value);
-  }, [usersState, arrayValues]);
+  }, [allUsers, arrayValues]);
 
 
   const setModal = (user) => {
@@ -117,8 +127,8 @@ const UserList = ({ users, isLoading, usersFavorites, setUsersFavorites, setPage
         </S.Filters>
         {isAlertOn ? <S.Alert>No Match </S.Alert> : null}
         <S.List >
-          {usersState.map((user, index) => {
-            if (usersState.length === index + 1) {
+          {allUsers.map((user, index) => {
+            if (allUsers.length === index + 1) {
               return <User
                 index={index}
                 key={index}
