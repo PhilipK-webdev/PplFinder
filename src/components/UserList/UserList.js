@@ -5,7 +5,7 @@ import * as S from "./style";
 import User from "./User";
 import Modal from "components/Modal";
 
-const arrayValues = [];
+let arrayValues = [];
 const UserList = ({
   users,
   isLoading,
@@ -45,11 +45,10 @@ const UserList = ({
   }
 
   useEffect(() => {
-    usersFavorites.length ? setAddUserToFavorite([...usersFavorites])
+    usersFavorites.length ?
+      setAddUserToFavorite([...usersFavorites])
       : setAddUserToFavorite([]);
-    if (usersFavorites.length) {
-      updateFavoriteUsers();
-    }
+    updateFavoriteUsers();
   }, [usersFavorites])
 
   useEffect(() => {
@@ -64,11 +63,6 @@ const UserList = ({
         }
       });
     }).flat();
-    // if (!temporaryArray.length && arrayValues.length) {
-    //   setIsAlertOn(true);
-    // } else {
-    //   setIsAlertOn(false);
-    // }
     setAllUsers([...arrayValuesCopy]);
   }
 

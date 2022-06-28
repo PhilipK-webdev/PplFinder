@@ -1,5 +1,4 @@
 import React from 'react';
-import Button from 'components/Button';
 import Modal from '@material-ui/core/Modal';
 import * as S from "./style";
 import Avatar from '@material-ui/core/Avatar';
