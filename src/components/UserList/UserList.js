@@ -57,19 +57,19 @@ const UserList = ({
   }, [users]);
 
   const filterUsersByCountry = (value) => {
-    const temporaryArray = arrayValues.map((country, indexCountry) => {
+    const arrayValuesCopy = arrayValues.map((country, indexCountry) => {
       return users.filter((user, index) => {
         if (user.nat === country) {
           return user;
         }
       });
     }).flat();
-    if (!temporaryArray.length && arrayValues.length) {
-      setIsAlertOn(true);
-    } else {
-      setIsAlertOn(false);
-    }
-    setAllUsers([...temporaryArray]);
+    // if (!temporaryArray.length && arrayValues.length) {
+    //   setIsAlertOn(true);
+    // } else {
+    //   setIsAlertOn(false);
+    // }
+    setAllUsers([...arrayValuesCopy]);
   }
 
   const setFavorite = (user) => {
@@ -125,7 +125,10 @@ const UserList = ({
           <CheckBox value="DE" label="Germany" onChange={onChange} />
           <CheckBox value="ES" label="Spain" onChange={onChange} />
         </S.Filters>
-        {isAlertOn ? <S.Alert>No Match </S.Alert> : null}
+        {allUsers.length === 0 && arrayValues.length > 0
+          ? <S.Alert>No Match </S.Alert>
+          : null
+        }
         <S.List >
           {allUsers.map((user, index) => {
             if (allUsers.length === index + 1) {
